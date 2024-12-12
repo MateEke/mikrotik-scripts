@@ -25,3 +25,11 @@ IPV6 / DHCPv6 Client / pppoe-out / advanced
 /delay 1000ms
 /system script run cloudflare_ddns_ipv6
 ```
+
+## Wireguard interface reset
+
+Tools / Netwatch / {{host}} / Down:
+
+```
+/system script run wireguard_interface_reset
+```
