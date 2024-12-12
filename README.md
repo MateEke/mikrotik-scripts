@@ -13,6 +13,8 @@ In PPP / Profile / default / Scripts / On Up add:
 /ip cloud force-update
 ```
 
+## Dynamic ipv6 prefix update for firewall
+
 For dynamic ipv6 prefix updates also add:
 IPV6 / DHCPv6 Client / pppoe-out / advanced
 
