@@ -14,8 +14,8 @@
 :local ipv6Interface "bridge"
 # Domain to be updated (only for logging)
 :local CFdomain "##SECRET&&"
-# Cloudflare API token
-:local CFtkn "##SECRET&&"
+# Cloudflare API token (stored as a disabled ppp secret, hidden from /export)
+:local CFtkn [/ppp secret get [find name="cf-token"] password]
 # Cloudflare zone id
 :local CFzoneid "##SECRET&&"
 # Cloudflare dns entry id

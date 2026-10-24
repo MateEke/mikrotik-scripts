@@ -7,6 +7,14 @@ Secrets are replaced with `##SECRET&&`.
 
 One copy of the script per DNS record (e.g. `cloudflare_ddns_ipv4`, `cloudflare_ddns_ipv6`).
 
+The API token is read from a disabled ppp secret, so it doesn't end up in `/export` (script sources aren't hidden as sensitive). Token permission: Zone / DNS / Edit for the zone.
+
+```
+/ppp secret add name=cf-token disabled=yes password="##SECRET&&"
+```
+
+The scripts need the `sensitive` policy to read it.
+
 In PPP / Profile / default / Scripts / On Up add:
 
 ```
