@@ -25,12 +25,14 @@
     :if (0=[:len $ifname]) do={
         :log warning "dynamic_prefix_update: An address list entry is marked for update but does not name an interface.";
     } else={
-        :local ifaddresses [/ipv6 address find global interface=$ifname from-pool=ipv6];
+        :local ifaddresses [/ipv6 address find global interface=$ifname from-pool=ipv6 disabled=no];
         :if (1!=[:len $ifaddresses]) do={
             :log warning "dynamic_prefix_update: Found $[:len $ifaddresses] global IPv6 addresses for interface \"$ifname\".";
         } else={
             :local addrlen [:pick $addr ([:find $addr "/" 0]+1) [:len $addr]];
             :local prefix [/ipv6 address get number=($ifaddresses->0) address];
+            # skip pool templates (see pd_watchdog)
+            :if ([:pick $prefix 0 2] = "::") do={ :log warning "dynamic_prefix_update: template address, skipping"; :error "template" }
             :local prefixlen [:pick $prefix ([:find $prefix "/" 0]+1) [:len $prefix]];
             :if ($addrlen < $prefixlen) do={
                 :set prefixlen $addrlen;

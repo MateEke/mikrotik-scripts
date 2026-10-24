@@ -1,0 +1,6 @@
+# backups / exports, may contain secrets
+*.backup
+*.rif
+*.npk
+*-full.rsc
+export*.rsc

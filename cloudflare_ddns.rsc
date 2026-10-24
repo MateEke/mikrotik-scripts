@@ -48,7 +48,11 @@
 :if ($CFcloud = "false") do={
     :local currentIP ""
     :if ($ipVersion = 6) do={ 
-        :set currentIP [/ipv6/address get [:pick [find global interface=$ipv6Interface from-pool=$ipv6Pool] 0 ] address];
+        # skip disabled entries and pool templates (see pd_watchdog)
+        :local addrIds [/ipv6 address find global interface=$ipv6Interface from-pool=$ipv6Pool disabled=no]
+        :if ([:len $addrIds] = 0) do={ :log warning "CF: no active from-pool address, skipping"; :error "no address" }
+        :set currentIP [/ipv6 address get ($addrIds->0) address]
+        :if ([:pick $currentIP 0 2] = "::") do={ :log warning "CF: $currentIP is a pool template, skipping"; :error "template" }
     } else={
         :set currentIP [/ip address get [/ip address find interface=$WANInterface ] address];
     }
