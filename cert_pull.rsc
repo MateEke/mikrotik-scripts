@@ -1,4 +1,4 @@
-# Installs this device's cert + key for www-ssl from an encrypted pfx on a web server.
+# Installs this device's cert + key for www-ssl and api-ssl from an encrypted pfx on a web server.
 # <dev>.serial is checked first, the pfx is only downloaded when it names a different cert.
 
 :local dev "router"
@@ -23,7 +23,7 @@
     /certificate set $new name=$leaf
     :foreach c in=[/certificate find name=$tmp] do={ /certificate set $c name=("le-ca-" . [/certificate get $c common-name]) }
     :local old [/ip service get www-ssl certificate]
-    /ip service set www-ssl certificate=$leaf
+    /ip service set [find where name="www-ssl" or name="api-ssl"] certificate=$leaf
     :if ($old != "none" && $old != "" && $old != $leaf) do={ /certificate remove [find name=$old] }
     /certificate remove [find where name~"^le-ca-" and expired]
     :log info ("cert-pull: www-ssl now uses " . $leaf)

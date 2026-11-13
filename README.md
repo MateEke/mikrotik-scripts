@@ -61,7 +61,7 @@ The script switches between two listen ports, so allow both in the input firewal
 
 ## Let's Encrypt cert pull
 
-certbot (DNS-01) runs on a server, its deploy hook exports each device cert as an encrypted pfx (`<dev>.pfx`) and writes the leaf serial to `<dev>.serial`, both served over https. The router checks the serial daily and only imports the pfx when it changed, then switches www-ssl to it and removes the old cert. The key never travels unencrypted, and the router needs no credentials on the server.
+certbot (DNS-01) runs on a server, its deploy hook exports each device cert as an encrypted pfx (`<dev>.pfx`) and writes the leaf serial to `<dev>.serial`, both served over https. The router checks the serial daily and only imports the pfx when it changed, then switches www-ssl and api-ssl to it and removes the old cert. The key never travels unencrypted, and the router needs no credentials on the server.
 
 The pfx passphrase is read from a disabled ppp secret, same as the Cloudflare token:
 
