@@ -58,3 +58,16 @@ Tools / Netwatch / {{host}} / Down:
 ```
 
 The script switches between two listen ports, so allow both in the input firewall.
+
+## Let's Encrypt cert pull
+
+certbot (DNS-01) runs on a server, its deploy hook exports each device cert as an encrypted pfx (`<dev>.pfx`) and writes the leaf serial to `<dev>.serial`, both served over https. The router checks the serial daily and only imports the pfx when it changed, then switches www-ssl to it and removes the old cert. The key never travels unencrypted, and the router needs no credentials on the server.
+
+The pfx passphrase is read from a disabled ppp secret, same as the Cloudflare token:
+
+```
+/ppp secret add name=cert-pfx-router disabled=yes password="##SECRET&&"
+/system scheduler add name=cert-pull start-time=05:30:00 interval=1d policy=read,write,test,sensitive on-event="/system script run cert-pull"
+```
+
+`/certificate import name=` gives every cert in the file the same name, and www-ssl may then pick a CA without a key (connection reset), so the script renames the CAs.
